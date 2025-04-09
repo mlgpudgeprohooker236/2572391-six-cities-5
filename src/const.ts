@@ -1,12 +1,9 @@
-const Settings = {
-  OffersCount: 5
-};
-
 enum AppRoute {
   Root = '/',
   Login = '/login',
   Favorites = '/favorites',
-  Offer = '/offer/:id'
+  Offer = '/offer/:id',
+  OfferBase = '/offer'
 }
 
 enum AuthorizationStatus {
@@ -15,4 +12,8 @@ enum AuthorizationStatus {
   Unknown = 'UNKNOWN'
 }
 
-export { Settings, AppRoute, AuthorizationStatus };
+const CommentFormSettings = {
+  CommentMinLength: 50
+};
+
+export { AppRoute, AuthorizationStatus, CommentFormSettings };
