@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import { Offer } from '../../types/offer/offer';
+import { Offer } from '../../types/offer';
 import OffersList from '../../components/offers-list/offers-list';
 import Header from '../../components/header/header';
 
@@ -41,7 +41,7 @@ export default function FavoritesPage({ offers }: FavoritesPageProps): JSX.Eleme
                         </a>
                       </div>
                     </div>
-                    <OffersList offers={favorites} />
+                    <OffersList offers={favorites} onCardHover={() => {}} onCardLeave={() => {}} />
                   </li>
                 ))
               }

@@ -16,4 +16,9 @@ const CommentFormSettings = {
   CommentMinLength: 50
 };
 
-export { AppRoute, AuthorizationStatus, CommentFormSettings };
+const MapSettings = {
+  UrlMarkerDefault: 'https://assets.htmlacademy.ru/content/intensive/javascript-1/demo/interactive-map/pin.svg',
+  UrlMarkerCurrent: 'https://assets.htmlacademy.ru/content/intensive/javascript-1/demo/interactive-map/main-pin.svg'
+};
+
+export { AppRoute, AuthorizationStatus, CommentFormSettings, MapSettings };

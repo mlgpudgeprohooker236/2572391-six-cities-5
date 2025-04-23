@@ -1,13 +1,31 @@
 import { Helmet } from 'react-helmet-async';
 import OffersList from '../../components/offers-list/offers-list';
-import { Offer } from '../../types/offer/offer';
+import { Offer } from '../../types/offer';
+import { City } from '../../types/city';
 import Header from '../../components/header/header';
+import Map from '../../components/map/map';
+import { useState } from 'react';
 
 type MainPageProps = {
   offers: Offer[];
 }
 
 export default function MainPage({ offers }: MainPageProps): JSX.Element {
+  const [activeCardId, setActiveCardById] = useState<string | null>(null);
+  const [currentCity,] = useState<City>(
+    {
+      name: 'Amsterdam',
+      location:
+      {
+        latitude: 52.37454,
+        longitude: 4.897976,
+        zoom: 13
+      }
+    }
+  );
+
+  const selectedOffer = offers.find((offer) => offer.id === activeCardId);
+
   return (
     <div className="page page--gray page--main">
       <Helmet>
@@ -73,10 +91,18 @@ export default function MainPage({ offers }: MainPageProps): JSX.Element {
                   <li className="places__option" tabIndex={0}>Top rated first</li>
                 </ul>
               </form>
-              <OffersList offers={offers} />
+              <OffersList
+                offers={offers}
+                onCardHover={setActiveCardById}
+                onCardLeave={() => setActiveCardById(null)}
+              />
             </section>
             <div className="cities__right-section">
-              <section className="cities__map map"></section>
+              <Map
+                city={currentCity}
+                points={offers}
+                selectedPoint={selectedOffer}
+              />
             </div>
           </div>
         </div>
