@@ -7,13 +7,14 @@ import { City } from '../../types/city';
 import { Point, Points } from '../../types/point';
 
 type MapProps = {
+  className: string;
   city: City;
   points: Points;
-  selectedPoint: Point | undefined;
+  selectedPoint?: Point;
 };
 
 export default function Map(props: MapProps) {
-  const { city, points, selectedPoint } = props;
+  const { className, city, points, selectedPoint } = props;
   const mapRef = useRef(null);
   const map = useMap(mapRef, city.location);
 
@@ -39,5 +40,5 @@ export default function Map(props: MapProps) {
     }
   }, [map, points, selectedPoint]);
 
-  return (<section className="cities__map map" ref={mapRef} />);
+  return (<section className={`${className}__map map`} ref={mapRef} />);
 }

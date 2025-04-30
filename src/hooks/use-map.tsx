@@ -30,6 +30,8 @@ export default function useMap(
       instance.addLayer(layer);
       setMap(instance);
       isRenderedRef.current = true;
+    } else if (mapRef.current !== null) {
+      map?.setView({lat: location.latitude, lng: location.longitude}, location.zoom);
     }
   }, [mapRef, location]);
   return map;

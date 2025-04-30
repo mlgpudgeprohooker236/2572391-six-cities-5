@@ -1,5 +1,5 @@
 import { ChangeEvent, Fragment, useState } from 'react';
-import { CommentFormSettings } from '../../const';
+import { CommentFormSettings} from '../../const';
 
 const Rating = {
   'Terriby': 1,
@@ -23,8 +23,8 @@ export default function CommentForm(): JSX.Element {
 
   const handleFieldChange = (evt: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = evt.target;
-    if(evt.target.type === 'radio') {
-      setFormData({... formData, [name]: parseInt(value, 10)});
+    if (evt.target.type === 'radio') {
+      setFormData({ ...formData, [name]: parseInt(value, 10) });
       return;
     }
     setFormData({ ...formData, [name]: value });
@@ -34,15 +34,12 @@ export default function CommentForm(): JSX.Element {
     formData.review.length >= CommentFormSettings.CommentMinLength
     && formData.rating !== null;
 
-  // NOTE: Передаем radioButton-ы в обратном порядке,
-  // т.к. для нормального hover-а на рейтинге используется row-reverse,
-  // который в свою очередь используется по причине отсутствия в css селектора для предыдущего элемента.
   return (
     <form className="reviews__form form" action="#" method="post">
       <label className="reviews__label form__label" htmlFor="review">Your review</label>
       <div className="reviews__rating-form form__rating">
         {
-          Object.entries(Rating).sort((a,b) => b[1] - a[1]).map(([ratingTitle, rating]) => (
+          Object.entries(Rating).sort((a, b) => b[1] - a[1]).map(([ratingTitle, rating]) => (
             <Fragment key={rating}>
               <input
                 className="form__rating-input visually-hidden"

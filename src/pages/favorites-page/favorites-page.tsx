@@ -2,10 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import { Offer } from '../../types/offer';
 import OffersList from '../../components/offers-list/offers-list';
 import Header from '../../components/header/header';
-
-type FavoritesPageProps = {
-  offers: Offer[];
-}
+import { useAppSelector } from '../../hooks/use-app-selector';
 
 function getFavoritesByCity(offers: Offer[]): Record<string, Offer[]> {
   const favoriteOffers = offers.filter((offer) => offer.isFavorite);
@@ -17,7 +14,8 @@ function getFavoritesByCity(offers: Offer[]): Record<string, Offer[]> {
   return favoritesByCity;
 }
 
-export default function FavoritesPage({ offers }: FavoritesPageProps): JSX.Element {
+export default function FavoritesPage(): JSX.Element {
+  const offers = useAppSelector((state) => state.offers);
   const favoritesByCity = getFavoritesByCity(offers);
 
   return (

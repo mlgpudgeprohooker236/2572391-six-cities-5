@@ -1,7 +1,11 @@
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../const';
+import { useAppSelector } from '../../hooks/use-app-selector';
 
 export default function Header() {
+  const offers = useAppSelector((state) => state.offers);
+  const favoritesCount = offers.reduce((count, offer) => offer.isFavorite ? count + 1 : count, 0);
+
   return (
     <header className="header">
       <div className="container">
@@ -18,7 +22,7 @@ export default function Header() {
                   <div className="header__avatar-wrapper user__avatar-wrapper">
                   </div>
                   <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
-                  <span className="header__favorite-count">3</span>
+                  <span className="header__favorite-count">{favoritesCount}</span>
                 </Link>
               </li>
               <li className="header__nav-item">
