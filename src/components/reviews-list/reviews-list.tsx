@@ -11,7 +11,7 @@ export default function ReviewsList({ reviews }: ReviewListProps): JSX.Element {
       <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews.length}</span></h2>
       <ul className="reviews__list">
         {
-          reviews.map((review) => (
+          reviews.sort((a,b) => (new Date(b.date).getTime() - new Date(a.date).getTime())).map((review) => (
             <ReviewItem review={review} key={review.id} />
           ))
         }

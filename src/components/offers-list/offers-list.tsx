@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import { Offer } from '../../types/offer';
 import PlaceCard from '../place-card/place-card';
 
@@ -12,7 +11,7 @@ type OffersListProps = {
 
 export default function OffersList({ className, cardClassName, offers, onCardHover, onCardLeave }: OffersListProps) {
   return (
-    <div className={classNames(className, 'places__list')}>
+    <div className={className}>
       {offers.map((offer) => (
         <PlaceCard className={cardClassName} key={offer.id}
           offer={offer}

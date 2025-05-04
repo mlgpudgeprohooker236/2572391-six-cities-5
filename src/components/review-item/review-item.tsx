@@ -10,6 +10,7 @@ type ReviewProps = {
 
 
 export default function ReviewItem({ review }: ReviewProps): JSX.Element {
+  const reviewDate = new Date(review.date);
   return (
     <li className="reviews__item">
       <UserAvatar options={AvatarOptions.Review} user={review.user} />
@@ -18,7 +19,7 @@ export default function ReviewItem({ review }: ReviewProps): JSX.Element {
         <p className="reviews__text">
           {review.comment}
         </p>
-        <time className="reviews__time" dateTime={review.date.toDateString()}>{getReviewDateString(review.date)}</time>
+        <time className="reviews__time" dateTime={reviewDate.toDateString()}>{getReviewDateString(reviewDate)}</time>
       </div>
     </li>
   );

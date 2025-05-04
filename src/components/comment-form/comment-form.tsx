@@ -1,5 +1,7 @@
-import { ChangeEvent, Fragment, useState } from 'react';
-import { CommentFormSettings} from '../../const';
+import { ChangeEvent, FormEvent, Fragment, useState } from 'react';
+import { CommentFormSettings } from '../../const';
+import { useAppDispatch } from '../../hooks/use-app-dispatch';
+import { sendReviewAction } from '../../store/api-actions';
 
 const Rating = {
   'Terriby': 1,
@@ -9,7 +11,12 @@ const Rating = {
   'Perfect': 5,
 } as const;
 
-export default function CommentForm(): JSX.Element {
+type CommentFormProps = {
+  offerId: string;
+};
+
+export default function CommentForm({ offerId }: CommentFormProps): JSX.Element {
+  const dispatch = useAppDispatch();
 
   const initialFormState: {
     rating: typeof Rating[keyof typeof Rating] | 0;
@@ -30,12 +37,26 @@ export default function CommentForm(): JSX.Element {
     setFormData({ ...formData, [name]: value });
   };
 
+  let isReviewBeingSent = false;
+
+  const handleFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
+    evt.preventDefault();
+
+    isReviewBeingSent = true;
+    dispatch(sendReviewAction({ offerId, rating: formData.rating, comment: formData.review}))
+      .finally(() => {
+        isReviewBeingSent = false;
+        setFormData(initialFormState);
+      });
+  };
+
   const isFormDataValid =
     formData.review.length >= CommentFormSettings.CommentMinLength
-    && formData.rating !== null;
+    && formData.review.length <= CommentFormSettings.CommentMaxLength
+    && formData.rating !== 0;
 
   return (
-    <form className="reviews__form form" action="#" method="post">
+    <form className="reviews__form form" action="#" method="post" onSubmit={handleFormSubmit}>
       <label className="reviews__label form__label" htmlFor="review">Your review</label>
       <div className="reviews__rating-form form__rating">
         {
@@ -70,7 +91,7 @@ export default function CommentForm(): JSX.Element {
         <p className="reviews__help">
           To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay with at least <b className="reviews__text-amount">50 characters</b>.
         </p>
-        <button className="reviews__submit form__submit button" type="submit" disabled={!isFormDataValid}>Submit</button>
+        <button className="reviews__submit form__submit button" type="submit" disabled={!isFormDataValid || isReviewBeingSent}>Submit</button>
       </div>
     </form>
   );

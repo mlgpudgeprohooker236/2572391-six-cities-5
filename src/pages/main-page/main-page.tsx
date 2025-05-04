@@ -11,6 +11,7 @@ import { setCity } from '../../store/action';
 import SortingOptions from '../../components/sorting-options/sorting-options';
 import { SortingOption } from '../../types/sorting-option';
 import sortOffersByOption from '../../utils/offer';
+import Spinner from '../../components/spinner/spinner';
 
 export default function MainPage(): JSX.Element {
   const [activeCardId, setActiveCardById] = useState<string | null>(null);
@@ -20,8 +21,14 @@ export default function MainPage(): JSX.Element {
   const offers = useAppSelector((state) => state.offers);
   const offersForCurrentCity = offers.filter((offer) => offer.city.name === currentCity.name);
   const sortedOffers = sortOffersByOption(offersForCurrentCity, currentSortingOption);
-
   const selectedOffer = offersForCurrentCity.find((offer) => offer.id === activeCardId);
+  const isOffersDataLoading = useAppSelector((state) => state.isOffersDataLoading);
+
+  if(isOffersDataLoading) {
+    return (
+      <Spinner />
+    );
+  }
 
   return (
     <div className="page page--gray page--main">
@@ -49,7 +56,7 @@ export default function MainPage(): JSX.Element {
                 onSortingChange={(sortingOption) => setSortingOption(sortingOption)}
               />
               <OffersList
-                className="cities__places-list tabs__content"
+                className="cities__places-list places__list tabs__content"
                 cardClassName="cities"
                 offers={sortedOffers}
                 onCardHover={setActiveCardById}

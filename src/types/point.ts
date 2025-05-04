@@ -1,7 +1,7 @@
 import { Location } from './location';
 
 type Point = {
-  title: string;
+  id: string;
   location: Location;
 }
 
