@@ -3,14 +3,14 @@ import { MapSettings } from '../../const';
 
 const defaultCustomIcon = new Icon({
   iconUrl: MapSettings.UrlMarkerDefault,
-  iconSize: [40, 40],
-  iconAnchor: [20, 40]
+  iconSize: [28, 40],
+  iconAnchor: [14, 40]
 });
 
 const currentCustomIcon = new Icon({
   iconUrl: MapSettings.UrlMarkerCurrent,
-  iconSize: [40, 40],
-  iconAnchor: [20, 40]
+  iconSize: [28, 40],
+  iconAnchor: [14, 40]
 });
 
 export { defaultCustomIcon, currentCustomIcon };

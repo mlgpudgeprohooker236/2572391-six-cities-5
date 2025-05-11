@@ -1,25 +1,43 @@
 import { Helmet } from 'react-helmet-async';
-import { Offer } from '../../types/offer';
 import OffersList from '../../components/offers-list/offers-list';
-import Header from '../../components/header/header';
+import { Header } from '../../components/header/header';
 import { useAppSelector } from '../../hooks/use-app-selector';
 import FavoritesEmpty from './favorites-empty';
+import { AppRoute } from '../../const';
+import { Link } from 'react-router-dom';
+import { getFavorites, getIsFavoritesLoading } from '../../store/slices/favorites-data/selectors';
+import { OfferPreview } from '../../types/offer';
+import { useAppDispatch } from '../../hooks/use-app-dispatch';
+import { useMemo } from 'react';
+import { fetchFavoritesAction } from '../../store/api-actions/offer-api-actions';
+import Spinner from '../../components/spinner/spinner';
+import { PlaceCardOptions } from '../../components/place-card/place-card-options';
 
-function getFavoritesByCity(offers: Offer[]): Record<string, Offer[]> {
+function getFavoritesByCity(offers: OfferPreview[]): Record<string, OfferPreview[]> {
   const favoriteOffers = offers.filter((offer) => offer.isFavorite);
   const favoritesByCity = favoriteOffers.reduce((cities, offer) => {
     (cities[offer.city.name] ||= []).push(offer);
     return cities;
-  }, {} as Record<string, Offer[]>);
+  }, {} as Record<string, OfferPreview[]>);
 
   return favoritesByCity;
 }
 
 export default function FavoritesPage(): JSX.Element {
-  const offers = useAppSelector((state) => state.favorites);
+  const dispatch = useAppDispatch();
+  const offers = useAppSelector(getFavorites);
   const favoritesByCity = getFavoritesByCity(offers);
+  const isFavoritesLoading = useAppSelector(getIsFavoritesLoading);
 
-  if(offers.length === 0) {
+  useMemo(() => {
+    dispatch(fetchFavoritesAction());
+  }, []);
+
+  if(isFavoritesLoading) {
+    return <Spinner />;
+  }
+
+  if (offers.length === 0) {
     return <FavoritesEmpty />;
   }
 
@@ -39,17 +57,16 @@ export default function FavoritesPage(): JSX.Element {
                   <li key={city} className="favorites__locations-items">
                     <div className="favorites__locations locations locations--current">
                       <div className="locations__item">
-                        <a className="locations__item-link" href="#">
+                        <Link to={AppRoute.Root} className="locations__item-link">
                           <span>{city}</span>
-                        </a>
+                        </Link>
                       </div>
                     </div>
                     <OffersList
+                      options={PlaceCardOptions.Favorite}
                       offers={favorites}
                       className='favorites__places'
                       cardClassName='favorites'
-                      onCardHover={() => {}}
-                      onCardLeave={() => {}}
                     />
                   </li>
                 ))
@@ -59,9 +76,9 @@ export default function FavoritesPage(): JSX.Element {
         </div>
       </main>
       <footer className="footer container">
-        <a className="footer__logo-link" href="main.html">
+        <Link to={AppRoute.Root} className="footer__logo-link">
           <img className="footer__logo" src="img/logo.svg" alt="6 cities logo" width="64" height="33" />
-        </a>
+        </Link>
       </footer>
     </div>
   );

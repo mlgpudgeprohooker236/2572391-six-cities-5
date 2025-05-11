@@ -1,5 +1,9 @@
+import './styles.css';
+
 export default function Spinner(): JSX.Element {
   return (
-    <p>Loading...</p>
+    <div className="spinner-wrapper">
+      <span className="spinner"></span>
+    </div>
   );
 }

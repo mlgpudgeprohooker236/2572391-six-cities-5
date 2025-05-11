@@ -1,7 +1,7 @@
-import { Offer } from '../types/offer';
+import { OfferPreview } from '../types/offer';
 import { SortingOption } from '../types/sorting-option';
 
-export default function sortOffersByOption(offers: Offer[], option: SortingOption): Offer[] {
+export default function sortOffersByOption(offers: OfferPreview[], option: SortingOption): OfferPreview[] {
   switch(option) {
     case SortingOption.Popular:
       return [...offers];
@@ -12,4 +12,9 @@ export default function sortOffersByOption(offers: Offer[], option: SortingOptio
     case SortingOption.TopRatedFirst:
       return offers.sort((a,b) => b.rating - a.rating);
   }
+}
+
+export function getOfferStarRating(rating: number): number {
+  const PER_RATING_UNIT_PERCENTAGE = 20;
+  return Math.round(rating) * PER_RATING_UNIT_PERCENTAGE;
 }

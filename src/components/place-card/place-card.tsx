@@ -1,29 +1,37 @@
 import { Link } from 'react-router-dom';
-import { Offer } from '../../types/offer';
 import { AppRoute } from '../../const';
 import RatingBar from '../rating-bar/rating-bar';
 import Bookmark from '../bookmark/bookmark';
 import { useAppDispatch } from '../../hooks/use-app-dispatch';
-import { setFavoritesAction } from '../../store/api-actions';
+import { setFavoriteAction } from '../../store/api-actions/offer-api-actions';
+import { OfferPreview } from '../../types/offer';
+import { FavoritesActionType } from '../../types/favorites-action-type';
+import { PlaceCardOptionsType } from './place-card-options';
 
 type PlaceCardProps = {
-  offer: Offer;
+  options: PlaceCardOptionsType;
+  offer: OfferPreview;
   className: string;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
 }
 
-export default function PlaceCard({ offer, className, onMouseEnter, onMouseLeave }: PlaceCardProps): JSX.Element {
+export default function PlaceCard({ options, offer, className, onMouseEnter, onMouseLeave }: PlaceCardProps): JSX.Element {
   const dispatch = useAppDispatch();
 
-  const updateFavorites = (offerId: string, status: boolean) => {
-    dispatch(setFavoritesAction({ offerId, status: status ? 0 : 1 }));
+  const updateFavorites = (offerId: string, isFavorite: boolean) => {
+    dispatch(setFavoriteAction(
+      {
+        offerId,
+        actionType: isFavorite ? FavoritesActionType.Remove : FavoritesActionType.Add
+      }
+    ));
   };
 
   return (
     <article className={`${className}__card place-card`}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
+      onMouseEnter={() => onMouseEnter ? onMouseEnter() : null}
+      onMouseLeave={() => onMouseLeave ? onMouseLeave() : null}
     >
       {
         offer.isPremium &&
@@ -33,7 +41,7 @@ export default function PlaceCard({ offer, className, onMouseEnter, onMouseLeave
       }
       <div className={`${className}__image-wrapper place-card__image-wrapper`}>
         <Link to={`${AppRoute.OfferBase}/${offer.id}`}>
-          <img className="place-card__image" src={offer.previewImage} width="260" height="200" alt="Place image" />
+          <img className="place-card__image" src={offer.previewImage} width={options.imageWidth} height={options.imageHeight} alt="Place image" />
         </Link>
       </div>
       <div className="place-card__info">

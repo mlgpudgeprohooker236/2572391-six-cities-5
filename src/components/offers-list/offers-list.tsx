@@ -1,24 +1,28 @@
-import { Offer } from '../../types/offer';
+import { memo } from 'react';
+import { OfferPreview } from '../../types/offer';
 import PlaceCard from '../place-card/place-card';
+import { PlaceCardOptionsType } from '../place-card/place-card-options';
 
 type OffersListProps = {
+  options: PlaceCardOptionsType;
   className: string;
   cardClassName: string;
-  offers: Offer[];
-  onCardHover: (cardId: string) => void;
-  onCardLeave: () => void;
+  offers: OfferPreview[];
+  onCardHover?: (cardId: string | null) => void;
 }
 
-export default function OffersList({ className, cardClassName, offers, onCardHover, onCardLeave }: OffersListProps) {
+function OffersList({ options, className, cardClassName, offers, onCardHover }: OffersListProps) {
   return (
     <div className={className}>
       {offers.map((offer) => (
-        <PlaceCard className={cardClassName} key={offer.id}
+        <PlaceCard options={options} className={cardClassName} key={offer.id}
           offer={offer}
-          onMouseEnter={() => onCardHover(offer.id)}
-          onMouseLeave={() => onCardLeave()}
+          onMouseEnter={() => onCardHover ? onCardHover(offer.id) : null}
+          onMouseLeave={() => onCardHover ? onCardHover(null) : null}
         />
       ))}
     </div>
   );
 }
+
+export default memo(OffersList);

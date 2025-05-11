@@ -3,20 +3,20 @@ import { Marker, layerGroup } from 'leaflet';
 import useMap from '../../hooks/use-map';
 import { defaultCustomIcon, currentCustomIcon } from './icons';
 import 'leaflet/dist/leaflet.css';
-import { City } from '../../types/city';
-import { Point, Points } from '../../types/point';
+import { Points } from '../../types/point';
+import { Location } from '../../types/location';
 
 type MapProps = {
   className: string;
-  city: City;
+  cityLocation: Location;
   points: Points;
-  selectedPoint?: Point;
+  selectedPointId?: string | null;
 };
 
 export default function Map(props: MapProps) {
-  const { className, city, points, selectedPoint } = props;
+  const { className, cityLocation, points, selectedPointId } = props;
   const mapRef = useRef(null);
-  const map = useMap(mapRef, city.location);
+  const map = useMap(mapRef, cityLocation);
 
   useEffect(() => {
     if (map) {
@@ -28,7 +28,7 @@ export default function Map(props: MapProps) {
         });
         marker
           .setIcon(
-            selectedPoint !== undefined && point.id === selectedPoint.id
+            selectedPointId !== null && point.id === selectedPointId
               ? currentCustomIcon
               : defaultCustomIcon
           )
@@ -38,7 +38,7 @@ export default function Map(props: MapProps) {
         map.removeLayer(markerLayer);
       };
     }
-  }, [map, points, selectedPoint]);
+  }, [map, points, selectedPointId]);
 
   return (<section className={`${className}__map map`} ref={mapRef} />);
 }

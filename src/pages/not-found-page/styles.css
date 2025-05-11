@@ -1,0 +1,87 @@
+
+.page--not-found {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  height: 100vh
+}
+
+.page__main--not-found {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1
+}
+
+.page__main--not-found .page__not-found-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.not-found {
+  width: 100%;
+  padding: 0 0 93px 38px;
+  border-bottom: 2px solid rgba(222, 222, 222, .5);
+}
+
+.not-found__status-wrapper {
+  width: 420px;
+  margin-top: 16.7vh;
+  margin-right: auto;
+  margin-left: auto;
+  padding-top: 94px;
+  text-align: center;
+  background-image: url(../../src/pages/not-found-page/page-not-found.svg);
+  background-size: 60px 73px;
+  background-position: center top;
+  background-repeat: no-repeat
+}
+
+.not-found__status {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 32px;
+  line-height: 1.1875
+}
+
+.not-found__status-description {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 0 30px;
+  font-size: 16px;
+  line-height: 1.5
+}
+
+.link-to-main--wrapper {
+  padding-top: 50px;
+}
+
+.link-to-main {
+  display: block;
+  padding: 9px 21px 6px 16px;
+  color: #fff;
+  font-size: 19px;
+  line-height: 1.211;
+  font-weight: 300;
+  font-style: oblique;
+  background-color: #4481c3;
+  text-shadow: 1px 0 0, .5px 0 0, -1px 0 0;
+  -webkit-transform: skew(-15deg);
+  transform: skew(-15deg);
+  border-radius: 3px;
+  -webkit-transition: background .3s, color .3s, text-shadow .3s;
+  transition: background .3s, color .3s, text-shadow .3s;
+}
+
+.link-to-main span {
+  display: block;
+  -webkit-transform: skew(15deg);
+  transform: skew(15deg);
+}

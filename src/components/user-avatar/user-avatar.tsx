@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { AvatarOptionsType } from './avatar-options';
+import { AvatarOptions, AvatarOptionsType } from './avatar-options';
 import { User } from '../../types/user';
 
 type UserAvatarProps = {
@@ -21,7 +21,7 @@ export default function UserAvatar({options, user}: UserAvatarProps): JSX.Elemen
       <span className={`${options.className}__user-name`}>
         {user.name}
       </span>
-      {user.isPro &&
+      {user.isPro && options === AvatarOptions.Host &&
         <span className={`${options.className}__user-status`}>
           Pro
         </span>}

@@ -9,7 +9,6 @@ import NotFoundPage from '../../pages/not-found-page/not-found-page';
 import PrivateRoute from '../private-route/private-route';
 
 export default function App(): JSX.Element {
-
   return (
     <HelmetProvider>
       <BrowserRouter>

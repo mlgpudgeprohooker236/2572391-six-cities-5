@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, Fragment, useState } from 'react';
-import { CommentFormSettings } from '../../const';
-import { useAppDispatch } from '../../hooks/use-app-dispatch';
-import { sendReviewAction } from '../../store/api-actions';
+import { CommentFormSettings } from '../../../../const';
+import { useAppDispatch } from '../../../../hooks/use-app-dispatch';
+import { sendReviewAction } from '../../../../store/api-actions/offer-api-actions';
 
 const Rating = {
   'Terriby': 1,
@@ -17,6 +17,7 @@ type CommentFormProps = {
 
 export default function CommentForm({ offerId }: CommentFormProps): JSX.Element {
   const dispatch = useAppDispatch();
+  const [isReviewBeingSent, setIsReviewBeingSent] = useState(false);
 
   const initialFormState: {
     rating: typeof Rating[keyof typeof Rating] | 0;
@@ -37,16 +38,14 @@ export default function CommentForm({ offerId }: CommentFormProps): JSX.Element 
     setFormData({ ...formData, [name]: value });
   };
 
-  let isReviewBeingSent = false;
-
   const handleFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
 
-    isReviewBeingSent = true;
+    setIsReviewBeingSent(true);
     dispatch(sendReviewAction({ offerId, rating: formData.rating, comment: formData.review}))
       .finally(() => {
-        isReviewBeingSent = false;
         setFormData(initialFormState);
+        setIsReviewBeingSent(false);
       });
   };
 

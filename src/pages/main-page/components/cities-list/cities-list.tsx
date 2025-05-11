@@ -1,4 +1,5 @@
-import { City } from '../../types/city';
+import { Link } from 'react-router-dom';
+import { City } from '../../../../types/city';
 
 type CitiesListProps = {
   cities: City[];
@@ -13,16 +14,16 @@ export default function CitiesList({ cities, selectedCity, onSelectChange }: Cit
         {
           cities.map((city) => (
             <li className="locations__item" key={city.name}>
-              <a
+              <Link
                 className={`locations__item-link tabs__item ${city === selectedCity ? 'tabs__item--active' : ''}`}
-                href="#"
+                to="#"
                 onClick={(e) => {
                   e.preventDefault();
                   onSelectChange(city);
                 }}
               >
                 <span>{city.name}</span>
-              </a>
+              </Link>
             </li>
           ))
         }

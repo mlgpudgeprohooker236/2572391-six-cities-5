@@ -1,20 +1,21 @@
 import { Link } from 'react-router-dom';
 import { AppRoute, AuthorizationStatus } from '../../const';
 import { useAppSelector } from '../../hooks/use-app-selector';
-import { store } from '../../store';
 import { useAppDispatch } from '../../hooks/use-app-dispatch';
-import { logoutAction } from '../../store/api-actions';
+import { logoutAction } from '../../store/api-actions/user-api-actions';
+import { getFavorites } from '../../store/slices/favorites-data/selectors';
+import { getAuthInfo, getAuthoriztionStatus } from '../../store/slices/user-data/selectors';
+import { memo, useCallback } from 'react';
 
-export default function Header() {
+function HeaderComponent() {
   const dispatch = useAppDispatch();
-  const offers = useAppSelector((state) => state.offers);
-  const favoritesCount = offers.reduce((count, offer) => offer.isFavorite ? count + 1 : count, 0);
-  const isAuthorized = store.getState().authorizationStatus === AuthorizationStatus.Auth;
-  const userData = useAppSelector((state) => state.userData);
+  const favoritesCount = useAppSelector(getFavorites).length;
+  const isAuthorized = useAppSelector(getAuthoriztionStatus) === AuthorizationStatus.Auth;
+  const userData = useAppSelector(getAuthInfo);
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     dispatch(logoutAction());
-  };
+  }, [dispatch]);
 
   return (
     <header className="header">
@@ -39,7 +40,7 @@ export default function Header() {
                       </Link>
                     </li>
                     <li className="header__nav-item">
-                      <Link to={AppRoute.Root} className="header__nav-link" onClick={handleLogout}>
+                      <Link to="#" className="header__nav-link" onClick={handleLogout}>
                         <span className="header__signout">Sign out</span>
                       </Link>
                     </li>
@@ -60,3 +61,5 @@ export default function Header() {
     </header>
   );
 }
+
+export const Header = memo(HeaderComponent);

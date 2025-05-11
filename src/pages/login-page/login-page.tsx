@@ -1,11 +1,14 @@
 import { Helmet } from 'react-helmet-async';
-import { AppRoute, AuthorizationStatus } from '../../const';
-import { Link, useNavigate } from 'react-router-dom';
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { AppRoute, AuthorizationStatus, Cities } from '../../const';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { ChangeEvent, FormEvent, useCallback, useRef, useState } from 'react';
 import { useAppDispatch } from '../../hooks/use-app-dispatch';
-import { loginAction } from '../../store/api-actions';
 import { useAppSelector } from '../../hooks/use-app-selector';
 import { toast } from 'react-toastify';
+import { getAuthoriztionStatus } from '../../store/slices/user-data/selectors';
+import { loginAction } from '../../store/api-actions/user-api-actions';
+import { getRandom } from '../../utils/number';
+import { setActiveCity } from '../../store/slices/application-data/application-data';
 
 function validateFormData(email: string, password: string): boolean {
   return (/^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/.test(email)
@@ -13,37 +16,27 @@ function validateFormData(email: string, password: string): boolean {
 }
 
 export default function LoginPage(): JSX.Element {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const authStatus = useAppSelector((state) => state.authorizationStatus);
+  const navigate = useNavigate();
+  const authStatus = useAppSelector(getAuthoriztionStatus);
+  const [formData, setFormData] = useState({email: '', password: ''});
+  const [cityName, city] = Object.entries(Cities)[getRandom(0, Object.entries(Cities).length - 1)];
+  const cityEntry = useRef({cityName, city});
 
-  useEffect(() => {
-    if (authStatus === AuthorizationStatus.Auth) {
-      navigate(AppRoute.Root);
-    }
-  }, [authStatus]);
+  const handleClickOnCityLabel = useCallback(() => {
+    dispatch(setActiveCity(cityEntry.current.city));
+    navigate(AppRoute.Root);
+  }, []);
 
-  const initialFormState: {
-    email: string;
-    password: string;
-  } = {
-    email: '',
-    password: ''
-  };
-
-  const [formData, setFormData] = useState(initialFormState);
-
-  const handleFieldChange = (evt: ChangeEvent<HTMLInputElement>) => {
+  const handleFieldChange = useCallback((evt: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = evt.target;
     setFormData({ ...formData, [name]: value });
-  };
+  }, [formData, dispatch]);
 
-  const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = useCallback((evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
 
-    const email = formData.email;
-    const password = formData.password;
-
+    const { email, password } = formData;
     if (email && password && validateFormData(email, password)) {
       dispatch(loginAction(
         {
@@ -57,7 +50,11 @@ export default function LoginPage(): JSX.Element {
     toast('Wrong email or password format!\n'
         + 'Password must contain latin letters and digits\n'
         + 'Email must be non empty and have correct format');
-  };
+  }, [formData, dispatch]);
+
+  if(authStatus === AuthorizationStatus.Auth) {
+    return <Navigate to={AppRoute.Root} />;
+  }
 
   return (
     <div className="page page--gray page--login">
@@ -94,9 +91,9 @@ export default function LoginPage(): JSX.Element {
           </section>
           <section className="locations locations--login locations--current">
             <div className="locations__item">
-              <a className="locations__item-link" href="#">
-                <span>Amsterdam</span>
-              </a>
+              <Link to={AppRoute.Root} className="locations__item-link" onClick={handleClickOnCityLabel}>
+                <span>{cityEntry.current.cityName}</span>
+              </Link>
             </div>
           </section>
         </div>

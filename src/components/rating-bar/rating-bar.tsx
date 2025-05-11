@@ -1,3 +1,5 @@
+import { getOfferStarRating } from '../../utils/offer';
+
 type RatingBarProps = {
   className: string;
   rating: number;
@@ -5,11 +7,10 @@ type RatingBarProps = {
 }
 
 export default function RatingBar({ className, rating, showValue } : RatingBarProps) {
-  const perRatingUnitPercentage = 20;
   return (
     <div className={`${className}__rating rating`}>
       <div className={`${className}__stars rating__stars`}>
-        <span style={{ width: `${rating * perRatingUnitPercentage}%` }} />
+        <span style={{ width: `${getOfferStarRating(rating)}%` }} />
         <span className="visually-hidden">Rating</span>
       </div>
       {
